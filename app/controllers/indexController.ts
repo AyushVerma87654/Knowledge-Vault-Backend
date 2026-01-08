@@ -8,10 +8,8 @@ export default class IndexController {
   public async index({ request, response }: HttpContext) {
     const file = request.file('file')
     if (!file) return response.json({ message: 'Send the file too' })
-    console.log('file', file)
     const fileName = file.clientName
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
-    console.log('timestamp', timestamp)
     const filePath = `documents/${fileName}-${timestamp}`
     const fileData = fs.readFileSync(file.tmpPath!)
     await supabase.storage.from('files').upload(filePath, fileData, { upsert: true })
